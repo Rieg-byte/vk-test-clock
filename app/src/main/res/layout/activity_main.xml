@@ -9,19 +9,31 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:gravity="center">
         <com.example.vktestclock.CustomClockView
             android:id="@+id/customClockView"
-            android:layout_width="200dp"
-            android:layout_height="200dp">
+            android:layout_width="180dp"
+            android:layout_height="180dp"
+            app:timeZone="Europe/London">
         </com.example.vktestclock.CustomClockView>
-        <Button
-            android:id="@+id/button"
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:text="@string/change_color">
-        </Button>
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center">
+            <com.example.vktestclock.CustomClockView
+                android:id="@+id/customClockView1"
+                android:layout_width="150dp"
+                android:layout_height="150dp">
+            </com.example.vktestclock.CustomClockView>
+            <Button
+                android:id="@+id/button"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:text="@string/change_color">
+            </Button>
+        </LinearLayout>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
