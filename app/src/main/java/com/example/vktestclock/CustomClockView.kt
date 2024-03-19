@@ -8,9 +8,9 @@ import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.os.Parcelable
 import android.util.AttributeSet
-import android.util.Log
 import android.view.View
 import java.util.Calendar
+import java.util.TimeZone
 import kotlin.math.cos
 import kotlin.math.min
 import kotlin.math.sin
@@ -29,6 +29,7 @@ class CustomClockView @JvmOverloads constructor(
     private var minuteHandColor = 0
     private var hourHandColor = 0
     private var numberColor = 0
+    private var timeZone: String? = null
 
     init {
         val typedArray = context.obtainStyledAttributes(attrs, R.styleable.CustomClockView, defStyleAttr, 0)
@@ -39,6 +40,7 @@ class CustomClockView @JvmOverloads constructor(
         minuteHandColor = typedArray.getColor(R.styleable.CustomClockView_minuteHandColor, Color.DKGRAY)
         hourHandColor = typedArray.getColor(R.styleable.CustomClockView_hourHandColor, Color.BLACK)
         numberColor = typedArray.getColor(R.styleable.CustomClockView_numberColor, Color.BLACK)
+        timeZone = typedArray.getString(R.styleable.CustomClockView_timeZone)
         typedArray.recycle()
     }
 
@@ -100,7 +102,6 @@ class CustomClockView @JvmOverloads constructor(
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         drawClock(canvas)
-        postInvalidateDelayed(1000)
     }
 
     override fun onSaveInstanceState(): Parcelable {
@@ -113,6 +114,7 @@ class CustomClockView @JvmOverloads constructor(
         bundle.putInt("minuteHandColor", minuteHandColor)
         bundle.putInt("hourHandColor", hourHandColor)
         bundle.putInt("numberColor", numberColor)
+        bundle.putString("timeZone", timeZone)
         return bundle
     }
 
@@ -125,6 +127,7 @@ class CustomClockView @JvmOverloads constructor(
         setMinuteHandColor(bundle.getInt("minuteHandColor"))
         setHourHandColor(bundle.getInt("hourHandColor"))
         setNumberColor(bundle.getInt("numberColor"))
+        timeZone = bundle.getString("timeZone")
         val instanceState = if (SDK_INT >= 33) {
             bundle.getParcelable("instanceState", Parcelable::class.java)
         } else {
@@ -175,16 +178,28 @@ class CustomClockView @JvmOverloads constructor(
         invalidate()
     }
 
+    fun setTimeZone(value: String) {
+        timeZone = value
+    }
+
     private fun drawClock(canvas: Canvas) {
+        drawScale(canvas)
+        drawNumbers(canvas)
+        drawHands(canvas)
+    }
+
+    private fun drawHands(canvas: Canvas) {
         val calendar = Calendar.getInstance()
+        timeZone?.let {
+            calendar.timeZone = TimeZone.getTimeZone(it)
+        }
         val second = calendar.get(Calendar.SECOND)
         val minute = calendar.get(Calendar.MINUTE)
         val hour = calendar.get(Calendar.HOUR)
-        drawScale(canvas)
-        drawNumbers(canvas)
         drawHourHand(canvas, hour)
         drawMinuteHand(canvas, minute)
         drawSecondHand(canvas, second)
+        postInvalidateDelayed(1000)
     }
 
     private fun drawHourHand(canvas: Canvas, hour: Int) {
@@ -217,7 +232,7 @@ class CustomClockView @JvmOverloads constructor(
         radius = (min(width, height) / 2f) * 0.9f
         canvas.drawCircle(centerX, centerY, radius, fillPaint)
         canvas.drawCircle(centerX, centerY, radius, borderPaint)
-        var len = 0.0f
+        var len: Float
         for (i in 0 until 60) {
             if (i % 5 == 0) {
                 divisionPaint.strokeWidth = 20f
