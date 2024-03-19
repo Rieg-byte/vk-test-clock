@@ -1,6 +1,5 @@
 package com.example.vktestclock
 
-import android.graphics.Color
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.vktestclock.databinding.ActivityMainBinding
@@ -16,10 +15,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         binding.button.setOnClickListener {
             f = if (f) {
-                binding.customClockView1.setNumberColor(Color.BLUE)
+                binding.customClockView1.setTimeZone("Europe/Moscow")
                 false
             } else {
-                binding.customClockView1.setNumberColor(Color.GREEN)
+                binding.customClockView1.setTimeZone("Europe/Paris")
                 true
             }
         }

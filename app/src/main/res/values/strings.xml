@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">VkTestClock</string>
-    <string name="change_color">Change color</string>
+    <string name="change_color">Change timezone</string>
 </resources>

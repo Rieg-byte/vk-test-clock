@@ -107,26 +107,12 @@ class CustomClockView @JvmOverloads constructor(
     override fun onSaveInstanceState(): Parcelable {
         val bundle = Bundle()
         bundle.putParcelable("instanceState", super.onSaveInstanceState())
-        bundle.putInt("borderColor", borderColor)
-        bundle.putInt("fillColor", fillColor)
-        bundle.putInt("divisionColor", divisionColor)
-        bundle.putInt("secondHandColor", secondHandColor)
-        bundle.putInt("minuteHandColor", minuteHandColor)
-        bundle.putInt("hourHandColor", hourHandColor)
-        bundle.putInt("numberColor", numberColor)
         bundle.putString("timeZone", timeZone)
         return bundle
     }
 
     override fun onRestoreInstanceState(state: Parcelable?) {
         val bundle = state as Bundle
-        setBorderColor(bundle.getInt("borderColor"))
-        setFillColor(bundle.getInt("fillColor"))
-        setDivisionColor(bundle.getInt("divisionColor"))
-        setSecondHandColor(bundle.getInt("secondHandColor"))
-        setMinuteHandColor(bundle.getInt("minuteHandColor"))
-        setHourHandColor(bundle.getInt("hourHandColor"))
-        setNumberColor(bundle.getInt("numberColor"))
         timeZone = bundle.getString("timeZone")
         val instanceState = if (SDK_INT >= 33) {
             bundle.getParcelable("instanceState", Parcelable::class.java)
@@ -134,48 +120,6 @@ class CustomClockView @JvmOverloads constructor(
             @Suppress("DEPRECATION") bundle.getParcelable("instanceState")
         }
         super.onRestoreInstanceState(instanceState)
-    }
-
-    fun setBorderColor(color: Int) {
-        borderPaint.color = color
-        borderColor = color
-        invalidate()
-    }
-
-    fun setFillColor(color: Int) {
-        fillPaint.color = color
-        fillColor = color
-        invalidate()
-    }
-
-    fun setDivisionColor(color: Int) {
-        divisionPaint.color = color
-        divisionColor = color
-        invalidate()
-    }
-
-    fun setSecondHandColor(color: Int) {
-        secondHandPaint.color = color
-        secondHandColor = color
-        invalidate()
-    }
-
-    fun setMinuteHandColor(color: Int) {
-        minuteHandPaint.color = color
-        minuteHandColor = color
-        invalidate()
-    }
-
-    fun setHourHandColor(color: Int) {
-        hourHandPaint.color = color
-        hourHandColor = color
-        invalidate()
-    }
-
-    fun setNumberColor(color: Int) {
-        numberPaint.color = color
-        numberColor = color
-        invalidate()
     }
 
     fun setTimeZone(value: String) {
